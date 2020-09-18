@@ -16,9 +16,9 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
   Future<List<ZipcodeAddressModel>> getAddressByZipcodeAndHouseNumber(
       String token, String zipcode, String houseNumber) async {
     final uri = Uri.https("api.maplink.com.br", "/v0/geocode/geocode", {
-      "token": token, //"c1vjeJ2A5mUE5m2jNJUtNGY6OXt6NXK",
-      "postalCode": zipcode, //"01404100",
-      if (houseNumber != null) "housenumber": houseNumber, //"179",
+      "token": token,
+      "postalCode": zipcode,
+      if (houseNumber != null) "housenumber": houseNumber,
     });
     final data = await _client.get(uri);
 

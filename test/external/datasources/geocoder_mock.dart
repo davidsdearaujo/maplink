@@ -12,7 +12,7 @@ Response get unauthorizedErrorResponse => Response(
     );
 
 final _errorResponseString =
-    r'{"message": "[{\"Code\":\"INVALID_APP_CODE_OR_TOKEN\",\"Message\":\"The informed token or application code [c1vjeJ2A5mUE5m2jNJUtNGY6OXt6NXK] is not valid\"}]"}';
+    r'{"message": "[{\"Code\":\"INVALID_APP_CODE_OR_TOKEN\",\"Message\":\"The informed token or application code [your-token] is not valid\"}]"}';
 final _responseMockString = '''{"addresses": [$responseMockSingleString]}''';
 final responseMockSingleString = '''{
     "country": {

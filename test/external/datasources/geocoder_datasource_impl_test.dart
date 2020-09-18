@@ -37,7 +37,7 @@ void main() {
       ErrorsMaplinkMessage(
         code: "INVALID_APP_CODE_OR_TOKEN",
         errorMessage:
-            "The informed token or application code [c1vjeJ2A5mUE5m2jNJUtNGY6OXt6NXK] is not valid",
+            "The informed token or application code [your-token] is not valid",
       )
     ]);
     when(client.get(any))

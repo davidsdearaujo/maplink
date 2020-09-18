@@ -1,6 +1,6 @@
-import 'package:maplink/src/domain/models/zipcode_address_model.dart';
-import 'package:maplink/src/presentation/maplink.dart';
-import 'package:test/test.dart';
+// import 'package:maplink/src/domain/models/zipcode_address_model.dart';
+// import 'package:maplink/src/presentation/maplink.dart';
+// import 'package:test/test.dart';
 
 void main() {
   // Maplink model;
@@ -18,20 +18,20 @@ void main() {
   // ];
 
   // test("sucesso", () async {
-  //   model = Maplink("c1vjeJ2A5mUE5m2jNJUtNGY6OXt6NXK=");
+  //   model = Maplink("your-token");
   //   final response =
   //       await model.getAddressByZipcodeAndHouseNumber("03118030", "156");
   //   expect(response, expectedResponse);
   // });
   // test("sucesso apenas cep", () async {
-  //   model = Maplink("c1vjeJ2A5mUE5m2jNJUtNGY6OXt6NXK=");
+  //   model = Maplink("your-token");
   //   final response =
   //       await model.getAddressByZipcodeAndHouseNumber("03118030");
   //   expect(response, expectedResponse);
   // });
 
   // test("error", () async {
-  //   model = Maplink("c1vjeJ2A5mUE5m2jNJUtNGY6OXt6NXK=");
+  //   model = Maplink("your-token");
   //   final response =
   //       await model.getAddressByZipcodeAndHouseNumber("031180301", "156");
   //   expect(response, expectedResponse);
