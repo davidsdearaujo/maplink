@@ -5,40 +5,43 @@ class NullDatasourceResponseFailure extends Failure {
 }
 
 class EmptyDatasourceResponseFailure extends Failure {
-  EmptyDatasourceResponseFailure() : super("empty-datasource-response");
+  EmptyDatasourceResponseFailure()
+      : super("empty-datasource-response", message: "Endereço não encontrado");
 }
 
-class GeocoderDatasourceErrorMessagesFailure extends Failure {
-  final List<GeocoderDatasourceErrorMessage> errors;
+class ErrorsMaplinkFailure extends Failure {
+  final List<ErrorsMaplinkMessage> errors;
 
-  GeocoderDatasourceErrorMessagesFailure(this.errors)
-      : super("geocoder-datasource-error-messages-failure");
+  ErrorsMaplinkFailure(this.errors) : super("maplink-error-messages-failure");
+
+  @override
+  String get message {
+    return errors?.map((e) => e.errorMessage)?.join("\n") ?? "";
+  }
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
-    return o is GeocoderDatasourceErrorMessagesFailure &&
-        listEquals(o.errors, errors);
+    return o is ErrorsMaplinkFailure && listEquals(o.errors, errors);
   }
 
   @override
   int get hashCode => errors.hashCode;
 
   @override
-  String toString() =>
-      'GeocoderDatasourceErrorMessagesFailure(errors: $errors)';
+  String toString() => 'ErrorsMaplinkFailure(errors: $errors)';
 }
 
-class GeocoderDatasourceErrorMessage {
+class ErrorsMaplinkMessage {
   final String code;
   final String errorMessage;
 
-  GeocoderDatasourceErrorMessage({this.code, this.errorMessage});
+  ErrorsMaplinkMessage({this.code, this.errorMessage});
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
-    return o is GeocoderDatasourceErrorMessage && o.code == code;
+    return o is ErrorsMaplinkMessage && o.code == code;
   }
 
   @override
@@ -46,7 +49,7 @@ class GeocoderDatasourceErrorMessage {
 
   @override
   String toString() =>
-      'GeocoderDatasourceErrorMessage(code: $code, errorMessage: $errorMessage)';
+      'ErrorsMaplinkMessage(code: $code, errorMessage: $errorMessage)';
 }
 
 bool listEquals<T>(List<T> a, List<T> b) {

@@ -30,13 +30,13 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
           ? jsonDecode(json["message"]) as List
           : json["message"];
       final parsedErrors = errors.map(
-        (error) => GeocoderDatasourceErrorMessage(
+        (error) => ErrorsMaplinkMessage(
           code: error["Code"],
           errorMessage: error["Message"],
         ),
       );
-      throw GeocoderDatasourceErrorMessagesFailure(
-        parsedErrors.toList().cast<GeocoderDatasourceErrorMessage>(),
+      throw ErrorsMaplinkFailure(
+        parsedErrors.toList().cast<ErrorsMaplinkMessage>(),
       );
     }
     final List addressList = json["addresses"];

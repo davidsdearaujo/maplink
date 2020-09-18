@@ -33,8 +33,8 @@ void main() {
     final zipcode = "mock-search";
     final number = "mock-number";
     final token = "mock-token";
-    final error = GeocoderDatasourceErrorMessagesFailure([
-      GeocoderDatasourceErrorMessage(
+    final error = ErrorsMaplinkFailure([
+      ErrorsMaplinkMessage(
         code: "INVALID_APP_CODE_OR_TOKEN",
         errorMessage:
             "The informed token or application code [c1vjeJ2A5mUE5m2jNJUtNGY6OXt6NXK] is not valid",
