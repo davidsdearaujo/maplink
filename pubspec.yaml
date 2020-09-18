@@ -3,6 +3,7 @@ description: Package para conectar com a maplink (SOAP)
 version: 1.0.0-dev.1
 author: David Araujo <david@flutterando.com.br>
 homepage: https://f-team.dev/
+repository: https://github.com/davidsdearaujo/maplink
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
