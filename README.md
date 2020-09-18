@@ -1,6 +1,21 @@
 # Maplink Package
 Projeto para conectar com a maplink (SOAP)
 
+pubspec.yaml
+```yaml
+dependencies:
+  maplink: <last version>
+```
+
+your_file.dart
+```dart
+final maplink = Maplink("your-token");
+final response = await model.getAddressByZipcodeAndHouseNumber(
+  "03118030", //cep
+  "156", //numero da residência (opcional)
+);
+```
+
 ## Erros Tratados
 Todos os erros recebem por herança a estrutura da classe `Failure`, que tem 3 propriedades principais:
  - `code`: Código para identificar o erro;
