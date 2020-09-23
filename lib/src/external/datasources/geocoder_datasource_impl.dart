@@ -14,10 +14,52 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
 
   @override
   Future<List<ZipcodeAddressModel>> getAddressByZipcodeAndHouseNumber(
-      String token, String zipcode, String houseNumber) async {
+    String token,
+    String zipcode,
+    String houseNumber,
+  ) async {
+    return await request(
+      token: token,
+      zipcode: zipcode,
+      houseNumber: houseNumber,
+    );
+  }
+
+  @override
+  Future<List<ZipcodeAddressModel>> getAddressByStreetName(
+    String token,
+    String country,
+    String city,
+    String state,
+    String streetName,
+    String houseNumber,
+  ) async {
+    return await request(
+      token: token,
+      country: country,
+      city: city,
+      state: state,
+      streetName: streetName,
+      houseNumber: houseNumber,
+    );
+  }
+
+  Future<List<ZipcodeAddressModel>> request({
+    String token,
+    String country,
+    String city,
+    String state,
+    String streetName,
+    String houseNumber,
+    String zipcode,
+  }) async {
     final uri = Uri.https("api.maplink.com.br", "/v0/geocode/geocode", {
       "token": token,
-      "postalCode": zipcode,
+      if (zipcode != null) "postalCode": zipcode,
+      if (streetName != null) "streetName": streetName,
+      if (city != null) "city": city,
+      if (state != null) "state": state,
+      if (country != null) "country": country,
       if (houseNumber != null) "housenumber": houseNumber,
     });
     final data = await _client.get(uri);
@@ -25,6 +67,18 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
     if (data == null) throw NullDatasourceResponseFailure();
 
     final json = jsonDecode(data.body);
+
+    throwMultipleErrorsIfExists(json);
+    throwSingleErrorsIfExists(json);
+
+    final List addressList = json["addresses"];
+    if (addressList == null) throw EmptyDatasourceResponseFailure();
+
+    final response = addressList.map(ZipcodeAddressModelMapper.fromJson);
+    return response.toList().cast<ZipcodeAddressModel>();
+  }
+
+  void throwMultipleErrorsIfExists(dynamic json) {
     if (json is Map && json["message"] != null) {
       final errors = json["message"] is String
           ? jsonDecode(json["message"]) as List
@@ -39,23 +93,15 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
         parsedErrors.toList().cast<ErrorsMaplinkMessage>(),
       );
     }
-    final List addressList = json["addresses"];
-    if (addressList == null) throw EmptyDatasourceResponseFailure();
-
-    final response = addressList.map(ZipcodeAddressModelMapper.fromJson);
-    return response.toList().cast<ZipcodeAddressModel>();
   }
 
-  @override
-  Future<List<ZipcodeAddressModel>> getAddressByStreetName(
-    String token,
-    String country,
-    String city,
-    String state,
-    String streetName,
-    String housenumber,
-  ) {
-    // TODO: implement getAddressByStreetName
-    throw UnimplementedError();
+  void throwSingleErrorsIfExists(dynamic json) {
+    if (json is Map && json["status"] != null) {
+      final error = ErrorsMaplinkMessage(
+        code: json["status"]["code"],
+        errorMessage: json["status"]["message"],
+      );
+      throw ErrorsMaplinkFailure([error]);
+    }
   }
 }

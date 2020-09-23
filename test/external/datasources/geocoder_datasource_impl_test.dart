@@ -17,36 +17,55 @@ void main() {
   });
 
   test("success", () async {
-    final zipcode = "mock-search";
-    final number = "mock-number";
-    final token = "mock-token";
     when(client.get(any)).thenAnswer((realInvocation) async => successResponse);
     final content = await datasource.getAddressByZipcodeAndHouseNumber(
-      token,
-      zipcode,
-      number,
+      "mock-token",
+      "mock-zipcode",
+      "mock-number",
     );
     expect(content?.length, 1);
     // expect(content, isA<List<ZipcodeAddressModel>>());
   });
-  test("invalid token error", () async {
-    final zipcode = "mock-search";
-    final number = "mock-number";
-    final token = "mock-token";
-    final error = ErrorsMaplinkFailure([
-      ErrorsMaplinkMessage(
-        code: "INVALID_APP_CODE_OR_TOKEN",
-        errorMessage:
-            "The informed token or application code [your-token] is not valid",
-      )
-    ]);
-    when(client.get(any))
-        .thenAnswer((realInvocation) async => unauthorizedErrorResponse);
-    final content = datasource.getAddressByZipcodeAndHouseNumber(
-      token,
-      zipcode,
-      number,
-    );
-    expect(content, throwsA(error));
+  group("multiple error message", () {
+    test("invalid token error", () async {
+      final error = ErrorsMaplinkFailure([
+        ErrorsMaplinkMessage(
+          code: "INVALID_APP_CODE_OR_TOKEN",
+          errorMessage:
+              "The informed token or application code [your-token] is not valid",
+        )
+      ]);
+      when(client.get(any))
+          .thenAnswer((realInvocation) async => unauthorizedErrorResponse);
+      final content = datasource.getAddressByZipcodeAndHouseNumber(
+        "mock-token",
+        "mock-zipcode",
+        "mock-number",
+      );
+      expect(content, throwsA(error));
+    });
+  });
+
+  group("single error message", () {
+    test("invalid country", () async {
+      final error = ErrorsMaplinkFailure([
+        ErrorsMaplinkMessage(
+          code: "ERROR",
+          errorMessage:
+              "[BRAA] is an invalid ISO 3166-1 alpha-3 country code or there is no geocoding for the country",
+        )
+      ]);
+      when(client.get(any))
+          .thenAnswer((realInvocation) async => invalidCountryErrorResponse);
+      final content = datasource.getAddressByStreetName(
+        "mock-token",
+        "mock-country",
+        "mock-city",
+        "mock-state",
+        "mock-streetName",
+        "mock-houseNumber",
+      );
+      expect(content, throwsA(error));
+    });
   });
 }
