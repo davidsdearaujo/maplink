@@ -17,8 +17,9 @@ class GetAddressByZipcodeAndHouseNumber {
   }) async {
     if (token == null) return left(NullTokenFailure());
     if (token.isEmpty) return left(EmptyTokenFailure());
-    if (zipcode == null) return left(NullZipcodeFailure());
-    if (zipcode.isEmpty) return left(EmptyZipcodeFailure());
+    if (zipcode == null || zipcode.isEmpty) {
+      return left(InvalidFieldFailure("zipcode"));
+    }
 
     return _repository.getAddressByZipcodeAndHouseNumber(
       token,

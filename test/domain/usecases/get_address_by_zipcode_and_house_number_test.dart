@@ -213,7 +213,7 @@ void main() {
         houseNumber: houseNumber,
       ).then((value) => value.fold(id, id));
 
-      expect(response, NullZipcodeFailure());
+      expect(response, InvalidFieldFailure("zipcode"));
     });
     test("EmptyZipcodeFailure", () async {
       final token = "mock-token";
@@ -241,7 +241,7 @@ void main() {
         houseNumber: houseNumber,
       ).then((value) => value.fold(id, id));
 
-      expect(response, EmptyZipcodeFailure());
+      expect(response, InvalidFieldFailure("zipcode"));
     });
   });
 }
