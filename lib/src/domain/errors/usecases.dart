@@ -29,3 +29,10 @@ class EmptyZipcodeFailure extends Failure {
             message:
                 "É necessário preencher o zipcode para realizar essa requisição.");
 }
+
+class InvalidFieldFailure extends Failure {
+  InvalidFieldFailure(String fieldName)
+      : super("invalid-field-$fieldName-failure",
+            message:
+                "É necessário preencher o campo $fieldName para realizar essa requisição.");
+}

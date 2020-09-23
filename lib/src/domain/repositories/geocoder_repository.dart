@@ -10,4 +10,13 @@ abstract class GeocoderRepository {
     String zipcode,
     String houseNumber,
   );
+
+  Future<Either<Failure, List<ZipcodeAddressModel>>> getAddressByStreetName(
+    String token,
+    String country,
+    String city,
+    String state,
+    String streetName,
+    String housenumber,
+  );
 }

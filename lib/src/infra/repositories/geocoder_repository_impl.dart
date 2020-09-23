@@ -40,4 +40,17 @@ class GeocoderRepositoryImpl implements GeocoderRepository {
       ));
     }
   }
+
+  @override
+  Future<Either<Failure, List<ZipcodeAddressModel>>> getAddressByStreetName(
+    String token,
+    String country,
+    String city,
+    String state,
+    String streetName,
+    String housenumber,
+  ) {
+    // TODO: implement getAddressByStreetName
+    throw UnimplementedError();
+  }
 }
