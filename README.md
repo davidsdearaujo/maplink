@@ -7,7 +7,7 @@ dependencies:
   maplink: <last version>
 ```
 
-your_file.dart
+getAddressByZipcodeAndHouseNumber
 ```dart
 final maplink = Maplink("your-token");
 final response = await model.getAddressByZipcodeAndHouseNumber(
@@ -15,6 +15,18 @@ final response = await model.getAddressByZipcodeAndHouseNumber(
   "156", //numero da residência (opcional)
 );
 ```
+getAddressByStreetName
+```dart
+final maplink = Maplink("your-token");
+final response = await model.getAddressByStreetName(
+  state: "SP",
+  city: "São Paulo",
+  country: "BRA", //ISO 3166-1 alpha-3 country code (BRA)
+  streetName: "Rua Guaimbé",
+  houseNumber: "156", //numero da residência (opcional)
+);
+```
+
 
 ## Erros Tratados
 Todos os erros recebem por herança a estrutura da classe `Failure`, que tem 3 propriedades principais:
@@ -27,10 +39,9 @@ Todos os erros recebem por herança a estrutura da classe `Failure`, que tem 3 p
 ### Validação de parâmetros
 |Código|Erro|Mensagem|Descrição|
 |---|---|---|---|
-|null-token-failure|`NullTokenFailure`|`É necessário preencher o token para realizar essa requisição.`|Token nulo|
-|empty-token-failure|`EmptyTokenFailure`|`É necessário preencher o token para realizar essa requisição.`|Token vazio|
-|null-token-failure|`NullZipcodeFailure`|`É necessário preencher o zipcode para realizar essa requisição.`|Zipcode nulo|
-|empty-token-failure|`EmptyZipcodeFailure`|`É necessário preencher o zipcode para realizar essa requisição.`|Zipcode vazio|
+|null-token-failure|`NullTokenFailure`|`É necessário preencher o token para continuar.`|Token nulo|
+|empty-token-failure|`EmptyTokenFailure`|`É necessário preencher o token para continuar.`|Token vazio|
+|invalid-field-${fieldName}-failure|`InvalidFieldFailure`|`É necessário preencher o campo $fieldName para continuar.`|Algum parâmetro informado está vazio ou nulo|
 
 <br/>
 
