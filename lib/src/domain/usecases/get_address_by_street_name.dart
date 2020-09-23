@@ -12,7 +12,7 @@ class GetAddressByStreetName {
   GetAddressByStreetName(this._repository);
   Future<Either<Failure, List<ZipcodeAddressModel>>> call({
     @required String token,
-    String country = "BRA",
+    String country,
     @required String city,
     @required String state,
     @required String streetName,
