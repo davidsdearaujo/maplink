@@ -6,4 +6,13 @@ abstract class GeocoderDatasource {
     String zipcode,
     String houseNumber,
   );
+  
+  Future<List<ZipcodeAddressModel>> getAddressByStreetName(
+    String token,
+    String country,
+    String city,
+    String state,
+    String streetName,
+    String housenumber,
+  );
 }

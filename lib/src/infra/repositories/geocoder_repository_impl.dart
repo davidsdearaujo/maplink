@@ -49,8 +49,29 @@ class GeocoderRepositoryImpl implements GeocoderRepository {
     String state,
     String streetName,
     String housenumber,
-  ) {
-    // TODO: implement getAddressByStreetName
-    throw UnimplementedError();
+  ) async {
+    try {
+      final response = await _datasource.getAddressByStreetName(
+        token,
+        country,
+        city,
+        state,
+        streetName,
+        housenumber,
+      );
+      return right(response);
+    } on Failure catch (exception) {
+      return left(exception);
+    } on Exception catch (exception) {
+      return left(DatasourceExceptionFailure(
+        "geocoder-datasource-exception",
+        exception,
+      ));
+    } catch (error) {
+      return left(DatasourceExceptionFailure(
+        "geocoder-datasource-unexpected-throw",
+        Exception(error),
+      ));
+    }
   }
 }

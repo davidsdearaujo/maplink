@@ -45,4 +45,17 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
     final response = addressList.map(ZipcodeAddressModelMapper.fromJson);
     return response.toList().cast<ZipcodeAddressModel>();
   }
+
+  @override
+  Future<List<ZipcodeAddressModel>> getAddressByStreetName(
+    String token,
+    String country,
+    String city,
+    String state,
+    String streetName,
+    String housenumber,
+  ) {
+    // TODO: implement getAddressByStreetName
+    throw UnimplementedError();
+  }
 }

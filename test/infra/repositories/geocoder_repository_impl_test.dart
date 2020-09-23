@@ -15,37 +15,46 @@ void main() {
     repository = GeocoderRepositoryImpl(datasource);
   });
 
+  final successMockResponse = [
+    ZipcodeAddressModel(
+      state: "SP",
+      city: "São Paulo",
+      country: "BRA",
+      district: "Mooca",
+      streetName: "Rua Guaimbé",
+      houseNumber: "156",
+      latitude: "0",
+      longitude: "0",
+    )
+  ];
+
   group("Sucesso", () {
-    test("", () async {
-      final token = "mock-token";
-      final zipcode = "mock-zipcode";
-      final houseNumber = "mock-houseNumber";
-      final mockResponse = [
-        ZipcodeAddressModel(
-          state: "SP",
-          city: "São Paulo",
-          country: "BRA",
-          district: "Mooca",
-          streetName: "Rua Guaimbé",
-          houseNumber: "156",
-          latitude: "0",
-          longitude: "0",
-        )
-      ];
-
+    test("getAddressByZipcodeAndHouseNumber", () async {
       when(datasource.getAddressByZipcodeAndHouseNumber(
-        token,
-        zipcode,
-        houseNumber,
-      )).thenAnswer((realInvocation) async => mockResponse);
-
+        any,
+        any,
+        any,
+      )).thenAnswer((realInvocation) async => successMockResponse);
       final response = await repository.getAddressByZipcodeAndHouseNumber(
-        token,
-        zipcode,
-        houseNumber,
+        "mock-token",
+        "mock-zipcode",
+        "mock-houseNumber",
       );
+      expect(response | null, successMockResponse);
+    });
 
-      expect(response | null, mockResponse);
+    test("getAddressByStreetName", () async {
+      when(datasource.getAddressByStreetName(any, any, any, any, any, any))
+          .thenAnswer((realInvocation) async => successMockResponse);
+      final response = await repository.getAddressByStreetName(
+        "mock-token",
+        "mock-country",
+        "mock-city",
+        "mock-state",
+        "mock-streetName",
+        "mock-houseNumber",
+      );
+      expect(response | null, successMockResponse);
     });
   });
 }
