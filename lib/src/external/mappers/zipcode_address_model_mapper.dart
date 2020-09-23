@@ -29,11 +29,20 @@ class ZipcodeAddressModelMapper {
     if (address["addressLine"] != null) {
       houseNumber = address["addressLine"]["houseNumber"];
       streetName = address["addressLine"]["name"];
-      if (address["addressLine"]["location"] != null &&
-          address["addressLine"]["location"]["coordinates"] != null &&
-          address["addressLine"]["location"]["coordinates"].length >= 2) {
-        latitude = address["addressLine"]["location"]["coordinates"][0]?.toString();
-        longitude = address["addressLine"]["location"]["coordinates"][1]?.toString();
+      final location = address["addressLine"]["location"];
+      if (location != null &&
+          location["coordinates"] != null &&
+          location["coordinates"].length >= 2) {
+        latitude = location["coordinates"][0]?.toString();
+        longitude = location["coordinates"][1]?.toString();
+      }
+    } else if (address["street"] != null) {
+      streetName = address["street"]["name"];
+      if (address["street"]["center"] != null &&
+          address["street"]["center"]["coordinates"] != null &&
+          address["street"]["center"]["coordinates"].length >= 2) {
+        latitude = address["street"]["center"]["coordinates"][0]?.toString();
+        longitude = address["street"]["center"]["coordinates"][1]?.toString();
       }
     }
 
