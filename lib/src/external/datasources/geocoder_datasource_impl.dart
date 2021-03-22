@@ -16,7 +16,7 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
   Future<List<ZipcodeAddressModel>> getAddressByZipcodeAndHouseNumber(
     String token,
     String zipcode,
-    String houseNumber,
+    String? houseNumber,
   ) async {
     return await request(
       token: token,
@@ -32,7 +32,7 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
     String city,
     String state,
     String streetName,
-    String houseNumber,
+    String? houseNumber,
   ) async {
     return await request(
       token: token,
@@ -45,13 +45,13 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
   }
 
   Future<List<ZipcodeAddressModel>> request({
-    String token,
-    String country,
-    String city,
-    String state,
-    String streetName,
-    String houseNumber,
-    String zipcode,
+    required String token,
+    String? country,
+    String? city,
+    String? state,
+    String? streetName,
+    String? houseNumber,
+    String? zipcode,
   }) async {
     final uri = Uri.https("api.maplink.com.br", "/v0/geocode/geocode", {
       "token": token,
@@ -64,25 +64,19 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
     });
     final data = await _client.get(uri);
 
-    if (data == null) throw NullDatasourceResponseFailure();
-
     final json = jsonDecode(data.body);
 
     throwMultipleErrorsIfExists(json);
     throwSingleErrorsIfExists(json);
 
     final List addressList = json["addresses"];
-    if (addressList == null) throw EmptyDatasourceResponseFailure();
-
     final response = addressList.map(ZipcodeAddressModelMapper.fromJson);
     return response.toList().cast<ZipcodeAddressModel>();
   }
 
   void throwMultipleErrorsIfExists(dynamic json) {
     if (json is Map && json["message"] != null) {
-      final errors = json["message"] is String
-          ? jsonDecode(json["message"]) as List
-          : json["message"];
+      final errors = json["message"] is String ? jsonDecode(json["message"]) as List : json["message"];
       final parsedErrors = errors.map(
         (error) => ErrorsMaplinkMessage(
           code: error["Code"],
@@ -101,7 +95,9 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
         code: json["status"]["code"],
         errorMessage: json["status"]["message"],
       );
-      throw ErrorsMaplinkFailure([error]);
+      throw ErrorsMaplinkFailure([
+        error
+      ]);
     }
   }
 }

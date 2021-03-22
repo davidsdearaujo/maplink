@@ -1,7 +1,7 @@
 class Failure implements Exception {
   final String code;
-  final String message;
-  final Exception innerException;
+  final String? message;
+  final Exception? innerException;
 
   Failure(this.code, {this.message, this.innerException});
 
@@ -18,9 +18,9 @@ class Failure implements Exception {
   String toString() => 'Failure(code: $code, message: $message)';
 
   Failure copyWith({
-    String code,
-    String message,
-    Exception innerException,
+    String? code,
+    String? message,
+    Exception? innerException,
   }) {
     return Failure(
       code ?? this.code,

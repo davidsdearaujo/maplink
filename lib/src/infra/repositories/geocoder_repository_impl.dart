@@ -13,11 +13,10 @@ class GeocoderRepositoryImpl implements GeocoderRepository {
   GeocoderRepositoryImpl(this._datasource);
 
   @override
-  Future<Either<Failure, List<ZipcodeAddressModel>>>
-      getAddressByZipcodeAndHouseNumber(
+  Future<Either<Failure, List<ZipcodeAddressModel>>> getAddressByZipcodeAndHouseNumber(
     String token,
     String zipcode,
-    String houseNumber,
+    String? houseNumber,
   ) async {
     try {
       final response = await _datasource.getAddressByZipcodeAndHouseNumber(
@@ -48,7 +47,7 @@ class GeocoderRepositoryImpl implements GeocoderRepository {
     String city,
     String state,
     String streetName,
-    String housenumber,
+    String? housenumber,
   ) async {
     try {
       final response = await _datasource.getAddressByStreetName(

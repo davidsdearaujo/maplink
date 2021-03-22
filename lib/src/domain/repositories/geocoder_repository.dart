@@ -4,11 +4,10 @@ import '../errors/failure.dart';
 import '../models/zipcode_address_model.dart';
 
 abstract class GeocoderRepository {
-  Future<Either<Failure, List<ZipcodeAddressModel>>>
-      getAddressByZipcodeAndHouseNumber(
+  Future<Either<Failure, List<ZipcodeAddressModel>>> getAddressByZipcodeAndHouseNumber(
     String token,
     String zipcode,
-    String houseNumber,
+    String? houseNumber,
   );
 
   Future<Either<Failure, List<ZipcodeAddressModel>>> getAddressByStreetName(
@@ -17,6 +16,6 @@ abstract class GeocoderRepository {
     String city,
     String state,
     String streetName,
-    String housenumber,
+    String? housenumber,
   );
 }

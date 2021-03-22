@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
 
 import '../domain/errors/failure.dart';
 import '../domain/errors/presentation.dart';
@@ -11,9 +10,9 @@ import '../external/datasources/geocoder_datasource_impl.dart';
 import '../infra/repositories/geocoder_repository_impl.dart';
 
 class Maplink {
-  GetAddressByStreetName _getAddressByStreetName;
-  GetAddressByZipcodeAndHouseNumber _getAddressByZipcodeAndHouseNumber;
-  String _token;
+  late GetAddressByStreetName _getAddressByStreetName;
+  late GetAddressByZipcodeAndHouseNumber _getAddressByZipcodeAndHouseNumber;
+  late String _token;
   String get token => _token;
 
   Maplink(String token) {
@@ -22,13 +21,12 @@ class Maplink {
     final datasource = GeocoderDatasourceImpl(client);
     final repository = GeocoderRepositoryImpl(datasource);
     _getAddressByStreetName = GetAddressByStreetName(repository);
-    _getAddressByZipcodeAndHouseNumber =
-        GetAddressByZipcodeAndHouseNumber(repository);
+    _getAddressByZipcodeAndHouseNumber = GetAddressByZipcodeAndHouseNumber(repository);
   }
 
   Future<List<ZipcodeAddressModel>> getAddressByZipcodeAndHouseNumber(
     String zipcode, [
-    String houseNumber,
+    String? houseNumber,
   ]) async {
     final response = await _getAddressByZipcodeAndHouseNumber(
       token: token,
@@ -43,11 +41,11 @@ class Maplink {
   ///|:-:|:-:|:-:|
   ///|country|`ISO 3166-1 alpha-3 country code`|BRA|
   Future<List<ZipcodeAddressModel>> getAddressByStreetName({
-    @required String city,
-    @required String state,
-    @required String streetName,
-    String country,
-    String housenumber,
+    required String city,
+    required String state,
+    required String streetName,
+    String? country,
+    String? housenumber,
   }) async {
     final response = await _getAddressByStreetName(
       token: token,
