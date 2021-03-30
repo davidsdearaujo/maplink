@@ -4,7 +4,7 @@ import 'package:maplink/src/presentation/maplink.dart';
 import 'package:test/test.dart';
 
 void main() {
-  Maplink model;
+  late Maplink model;
 
   // test("sucesso", () async {
   //   model = Maplink("your-token");
@@ -63,17 +63,15 @@ void main() {
   //   );
   // });
 
-  test("incorrect token error", () async {
+  test("incorrect token error", () {
     model = Maplink("incorrect-token");
-    final response =
-        model.getAddressByZipcodeAndHouseNumber("031180301", "156");
+    final response = model.getAddressByZipcodeAndHouseNumber("031180301", "156");
     expect(
         response,
         throwsA(ErrorsMaplinkFailure([
           ErrorsMaplinkMessage(
-            code: "INVALID_APP_CODE_OR_TOKEN",
-            errorMessage:
-                "The informed token or application code [incorrect-token] is not valid",
+            code: "ERROR",
+            errorMessage: "Monitor id not found for token: incorrect-token",
           )
         ])));
   });

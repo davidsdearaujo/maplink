@@ -5,8 +5,7 @@ class NullDatasourceResponseFailure extends Failure {
 }
 
 class EmptyDatasourceResponseFailure extends Failure {
-  EmptyDatasourceResponseFailure()
-      : super("empty-datasource-response", message: "Endereço não encontrado");
+  EmptyDatasourceResponseFailure() : super("empty-datasource-response", message: "Endereço não encontrado");
 }
 
 class ErrorsMaplinkFailure extends Failure {
@@ -16,7 +15,7 @@ class ErrorsMaplinkFailure extends Failure {
 
   @override
   String get message {
-    return errors?.map((e) => e.errorMessage)?.join("\n") ?? "";
+    return errors.map((e) => e.errorMessage).join("\n");
   }
 
   @override
@@ -33,8 +32,8 @@ class ErrorsMaplinkFailure extends Failure {
 }
 
 class ErrorsMaplinkMessage {
-  final String code;
-  final String errorMessage;
+  final String? code;
+  final String? errorMessage;
 
   ErrorsMaplinkMessage({this.code, this.errorMessage});
 
@@ -48,13 +47,10 @@ class ErrorsMaplinkMessage {
   int get hashCode => code.hashCode ^ errorMessage.hashCode;
 
   @override
-  String toString() =>
-      'ErrorsMaplinkMessage(code: $code, errorMessage: $errorMessage)';
+  String toString() => 'ErrorsMaplinkMessage(code: $code, errorMessage: $errorMessage)';
 }
 
 bool listEquals<T>(List<T> a, List<T> b) {
-  if (a == null) return b == null;
-  if (b == null || a.length != b.length) return false;
   if (identical(a, b)) return true;
   for (int index = 0; index < a.length; index += 1) {
     if (a[index] != b[index]) return false;

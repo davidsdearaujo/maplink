@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../datasources/geocoder_mock.dart';
 
 void main() {
-  ZipcodeAddressModel model;
+  late ZipcodeAddressModel model;
   setUp(() {
     final addressJson = jsonDecode(responseMockSingleString);
     model = ZipcodeAddressModelMapper.fromJson(addressJson);

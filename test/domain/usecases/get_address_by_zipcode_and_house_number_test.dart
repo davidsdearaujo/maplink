@@ -3,14 +3,14 @@ import 'package:maplink/src/domain/errors/usecases.dart';
 import 'package:maplink/src/domain/models/zipcode_address_model.dart';
 import 'package:maplink/src/domain/repositories/geocoder_repository.dart';
 import 'package:maplink/src/domain/usecases/get_address_by_zipcode_and_house_number.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 class MockGeocoderRepository extends Mock implements GeocoderRepository {}
 
 void main() {
-  MockGeocoderRepository repository;
-  GetAddressByZipcodeAndHouseNumber usecase;
+  late MockGeocoderRepository repository;
+  late GetAddressByZipcodeAndHouseNumber usecase;
 
   setUp(() {
     repository = MockGeocoderRepository();
@@ -34,15 +34,14 @@ void main() {
         )
       ];
 
-      when(repository.getAddressByZipcodeAndHouseNumber(any, any, any))
-          .thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
         zipcode: zipcode,
       );
 
-      expect(response | null, mockResponse);
+      expect(response.fold(id, id), mockResponse);
     });
     test("houseNumber null", () async {
       final token = "mock-token";
@@ -61,8 +60,7 @@ void main() {
         )
       ];
 
-      when(repository.getAddressByZipcodeAndHouseNumber(any, any, any))
-          .thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
@@ -70,7 +68,7 @@ void main() {
         houseNumber: houseNumber,
       );
 
-      expect(response | null, mockResponse);
+      expect(response.fold(id, id), mockResponse);
     });
     test("houseNumber vazio", () async {
       final token = "mock-token";
@@ -89,8 +87,7 @@ void main() {
         )
       ];
 
-      when(repository.getAddressByZipcodeAndHouseNumber(any, any, any))
-          .thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
@@ -98,7 +95,7 @@ void main() {
         houseNumber: houseNumber,
       );
 
-      expect(response | null, mockResponse);
+      expect(response.fold(id, id), mockResponse);
     });
     test("houseNumber '123'", () async {
       final token = "mock-token";
@@ -117,8 +114,7 @@ void main() {
         )
       ];
 
-      when(repository.getAddressByZipcodeAndHouseNumber(any, any, any))
-          .thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
@@ -126,39 +122,39 @@ void main() {
         houseNumber: houseNumber,
       );
 
-      expect(response | null, mockResponse);
+      expect(response.fold(id, id), mockResponse);
     });
   });
 
   group("Erro", () {
-    test("NullTokenFailure", () async {
-      final token = null;
-      final zipcode = "mock-zipcode";
-      final houseNumber = "123";
-      final mockResponse = [
-        ZipcodeAddressModel(
-          state: "SP",
-          city: "São Paulo",
-          country: "BRA",
-          district: "Mooca",
-          streetName: "Rua Guaimbé",
-          houseNumber: "156",
-          latitude: "0",
-          longitude: "0",
-        )
-      ];
+    // Token não pode ser nulo
+    // test("NullTokenFailure", () async {
+    //   final token = null;
+    //   final zipcode = "mock-zipcode";
+    //   final houseNumber = "123";
+    //   final mockResponse = [
+    //     ZipcodeAddressModel(
+    //       state: "SP",
+    //       city: "São Paulo",
+    //       country: "BRA",
+    //       district: "Mooca",
+    //       streetName: "Rua Guaimbé",
+    //       houseNumber: "156",
+    //       latitude: "0",
+    //       longitude: "0",
+    //     )
+    //   ];
 
-      when(repository.getAddressByZipcodeAndHouseNumber(any, any, any))
-          .thenAnswer((realInvocation) async => Right(mockResponse));
+    //   when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
 
-      final response = await usecase(
-        token: token,
-        zipcode: zipcode,
-        houseNumber: houseNumber,
-      ).then((value) => value.fold(id, id));
+    //   final response = await usecase(
+    //     token: token,
+    //     zipcode: zipcode,
+    //     houseNumber: houseNumber,
+    //   ).then((value) => value.fold(id, id));
 
-      expect(response, NullTokenFailure());
-    });
+    //   expect(response, NullTokenFailure());
+    // });
     test("EmptyTokenFailure", () async {
       final token = "";
       final zipcode = "mock-zipcode";
@@ -176,8 +172,7 @@ void main() {
         )
       ];
 
-      when(repository.getAddressByZipcodeAndHouseNumber(any, any, any))
-          .thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
@@ -187,34 +182,34 @@ void main() {
 
       expect(response, EmptyTokenFailure());
     });
-    test("NullZipcodeFailure", () async {
-      final token = "mock-token";
-      final zipcode = null;
-      final houseNumber = "123";
-      final mockResponse = [
-        ZipcodeAddressModel(
-          state: "SP",
-          city: "São Paulo",
-          country: "BRA",
-          district: "Mooca",
-          streetName: "Rua Guaimbé",
-          houseNumber: "156",
-          latitude: "0",
-          longitude: "0",
-        )
-      ];
+    // Zipcode não pode ser nulo
+    // test("NullZipcodeFailure", () async {
+    //   final token = "mock-token";
+    //   final zipcode = null;
+    //   final houseNumber = "123";
+    //   final mockResponse = [
+    //     ZipcodeAddressModel(
+    //       state: "SP",
+    //       city: "São Paulo",
+    //       country: "BRA",
+    //       district: "Mooca",
+    //       streetName: "Rua Guaimbé",
+    //       houseNumber: "156",
+    //       latitude: "0",
+    //       longitude: "0",
+    //     )
+    //   ];
 
-      when(repository.getAddressByZipcodeAndHouseNumber(any, any, any))
-          .thenAnswer((realInvocation) async => Right(mockResponse));
+    //   when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
 
-      final response = await usecase(
-        token: token,
-        zipcode: zipcode,
-        houseNumber: houseNumber,
-      ).then((value) => value.fold(id, id));
+    //   final response = await usecase(
+    //     token: token,
+    //     zipcode: zipcode,
+    //     houseNumber: houseNumber,
+    //   ).then((value) => value.fold(id, id));
 
-      expect(response, InvalidFieldFailure("zipcode"));
-    });
+    //   expect(response, InvalidFieldFailure("zipcode"));
+    // });
     test("EmptyZipcodeFailure", () async {
       final token = "mock-token";
       final zipcode = "";
@@ -232,8 +227,7 @@ void main() {
         )
       ];
 
-      when(repository.getAddressByZipcodeAndHouseNumber(any, any, any))
-          .thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
