@@ -8,10 +8,7 @@ void main() {
 
   // test("sucesso", () async {
   //   model = Maplink("your-token");
-  //   final response = await model.getAddressByZipcodeAndHouseNumber(
-  //     "03118030",
-  //     "156",
-  //   );
+  //   final response = await model.getAddressByZipcodeAndHouseNumber("03118030", "156");
   //   expect(response, [
   //     ZipcodeAddressModel(
   //       state: "SP",
@@ -65,15 +62,13 @@ void main() {
 
   test("incorrect token error", () async {
     model = Maplink("incorrect-token");
-    final response =
-        model.getAddressByZipcodeAndHouseNumber("031180301", "156");
+    final response = model.getAddressByZipcodeAndHouseNumber("031180301", "156");
     expect(
         response,
         throwsA(ErrorsMaplinkFailure([
           ErrorsMaplinkMessage(
             code: "INVALID_APP_CODE_OR_TOKEN",
-            errorMessage:
-                "The informed token or application code [incorrect-token] is not valid",
+            errorMessage: "The informed token or application code [incorrect-token] is not valid",
           )
         ])));
   });

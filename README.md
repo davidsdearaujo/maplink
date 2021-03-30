@@ -12,7 +12,7 @@ getAddressByZipcodeAndHouseNumber
 final maplink = Maplink("your-token");
 final response = await model.getAddressByZipcodeAndHouseNumber(
   "03118030", //cep
-  "156", //numero da residência (opcional)
+  "156", //número da residência (opcional)
 );
 ```
 getAddressByStreetName

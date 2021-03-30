@@ -1,7 +1,7 @@
 import 'package:maplink/src/domain/models/zipcode_address_model.dart';
 
 class ZipcodeAddressModelMapper {
-  static fromJson(dynamic address) {
+  static ZipcodeAddressModel fromJson(dynamic address) {
     if (address == null) return null;
     if (!(address is Map)) return null;
 

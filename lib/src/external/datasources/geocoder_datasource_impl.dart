@@ -62,15 +62,18 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
       if (country != null) "country": country,
       if (houseNumber != null) "housenumber": houseNumber,
     });
-    final data = await _client.get(uri);
-
+    var request = http.Request('GET', uri);
+    http.StreamedResponse apiResponse = await _client.send(request);
+    String data;
+    if (apiResponse.statusCode == 200) {
+      data = await apiResponse.stream.bytesToString();
+    } else {
+      print(apiResponse.reasonPhrase);
+    }
     if (data == null) throw NullDatasourceResponseFailure();
-
-    final json = jsonDecode(data.body);
-
+    final json = jsonDecode(data);
     throwMultipleErrorsIfExists(json);
     throwSingleErrorsIfExists(json);
-
     final List addressList = json["addresses"];
     if (addressList == null) throw EmptyDatasourceResponseFailure();
 
@@ -80,27 +83,15 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
 
   void throwMultipleErrorsIfExists(dynamic json) {
     if (json is Map && json["message"] != null) {
-      final errors = json["message"] is String
-          ? jsonDecode(json["message"]) as List
-          : json["message"];
-      final parsedErrors = errors.map(
-        (error) => ErrorsMaplinkMessage(
-          code: error["Code"],
-          errorMessage: error["Message"],
-        ),
-      );
-      throw ErrorsMaplinkFailure(
-        parsedErrors.toList().cast<ErrorsMaplinkMessage>(),
-      );
+      final errors = json["message"] is String ? jsonDecode(json["message"]) as List : json["message"];
+      final parsedErrors = errors.map((error) => ErrorsMaplinkMessage(code: error["Code"], errorMessage: error["Message"]));
+      throw ErrorsMaplinkFailure(parsedErrors.toList().cast<ErrorsMaplinkMessage>());
     }
   }
 
   void throwSingleErrorsIfExists(dynamic json) {
     if (json is Map && json["status"] != null) {
-      final error = ErrorsMaplinkMessage(
-        code: json["status"]["code"],
-        errorMessage: json["status"]["message"],
-      );
+      final error = ErrorsMaplinkMessage(code: json["status"]["code"], errorMessage: json["status"]["message"]);
       throw ErrorsMaplinkFailure([error]);
     }
   }
