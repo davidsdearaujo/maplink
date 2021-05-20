@@ -53,18 +53,24 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
     String? houseNumber,
     String? zipcode,
   }) async {
-    final uri = Uri.https("api.maplink.com.br", "/v0/geocode/geocode", {
-      "token": token,
-      if (zipcode != null) "postalCode": zipcode,
-      if (streetName != null) "streetName": streetName,
-      if (city != null) "city": city,
-      if (state != null) "state": state,
-      if (country != null) "country": country,
-      if (houseNumber != null) "housenumber": houseNumber,
-    });
-    final data = await _client.get(uri);
+    var request = http.Request(
+      'GET',
+      Uri.https("api.maplink.com.br", "/v0/geocode/geocode", {
+        "token": token,
+        if (zipcode != null) "postalCode": zipcode,
+        if (streetName != null) "streetName": streetName,
+        if (city != null) "city": city,
+        if (state != null) "state": state,
+        if (country != null) "country": country,
+        if (houseNumber != null) "housenumber": houseNumber,
+      }),
+    );
 
-    final json = jsonDecode(data.body);
+    http.StreamedResponse streamedResponse = await request.send();
+
+    final data = await streamedResponse.stream.bytesToString();
+
+    final json = jsonDecode(data);
 
     throwMultipleErrorsIfExists(json);
     throwSingleErrorsIfExists(json);
@@ -95,9 +101,7 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
         code: json["status"]["code"],
         errorMessage: json["status"]["message"],
       );
-      throw ErrorsMaplinkFailure([
-        error
-      ]);
+      throw ErrorsMaplinkFailure([error]);
     }
   }
 }
