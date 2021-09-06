@@ -23,7 +23,7 @@ void main() {
   });
 
   test("success", () async {
-    when(() => client.get(any())).thenAnswer((realInvocation) async => successResponse);
+    when(() => client.post(any())).thenAnswer((realInvocation) async => successResponse);
     final content = await datasource.getAddressByZipcodeAndHouseNumber(
       "mock-token",
       "mock-zipcode",
@@ -40,7 +40,7 @@ void main() {
           errorMessage: "The informed token or application code [your-token] is not valid",
         )
       ]);
-      when(() => client.get(any())).thenAnswer((realInvocation) async => unauthorizedErrorResponse);
+      when(() => client.post(any())).thenAnswer((realInvocation) async => unauthorizedErrorResponse);
       final content = datasource.getAddressByZipcodeAndHouseNumber(
         "mock-token",
         "mock-zipcode",
@@ -58,7 +58,7 @@ void main() {
           errorMessage: "[BRAA] is an invalid ISO 3166-1 alpha-3 country code or there is no geocoding for the country",
         )
       ]);
-      when(() => client.get(any())).thenAnswer((realInvocation) async => invalidCountryErrorResponse);
+      when(() => client.post(any())).thenAnswer((realInvocation) async => invalidCountryErrorResponse);
       final content = datasource.getAddressByStreetName(
         "mock-token",
         "mock-country",

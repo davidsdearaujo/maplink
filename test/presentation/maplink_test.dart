@@ -70,8 +70,8 @@ void main() {
         response,
         throwsA(ErrorsMaplinkFailure([
           ErrorsMaplinkMessage(
-            code: "ERROR",
-            errorMessage: "Monitor id not found for token: incorrect-token",
+            code: "oauth.v2.InvalidAccessToken",
+            errorMessage: "Invalid access token",
           )
         ])));
   });

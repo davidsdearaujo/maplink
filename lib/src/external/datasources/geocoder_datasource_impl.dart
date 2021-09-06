@@ -53,24 +53,19 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
     String? houseNumber,
     String? zipcode,
   }) async {
-    var request = http.Request(
-      'GET',
-      Uri.https("api.maplink.com.br", "/v0/geocode/geocode", {
-        "token": token,
-        if (zipcode != null) "postalCode": zipcode,
-        if (streetName != null) "streetName": streetName,
-        if (city != null) "city": city,
-        if (state != null) "state": state,
-        if (country != null) "country": country,
-        if (houseNumber != null) "housenumber": houseNumber,
-      }),
-    );
+    var uri = Uri.https("api.maplink.global", "geocode/v1/geocode", {
+      "token": token,
+      if (zipcode != null) "postalCode": zipcode,
+      if (streetName != null) "streetName": streetName,
+      if (city != null) "city": city,
+      if (state != null) "state": state,
+      if (country != null) "country": country,
+      if (houseNumber != null) "housenumber": houseNumber,
+    });
 
-    http.StreamedResponse streamedResponse = await request.send();
+    var request = await _client.post(uri);
 
-    final data = await streamedResponse.stream.bytesToString();
-
-    final json = jsonDecode(data);
+    final json = jsonDecode(request.body);
 
     throwMultipleErrorsIfExists(json);
     throwSingleErrorsIfExists(json);
@@ -96,10 +91,10 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
   }
 
   void throwSingleErrorsIfExists(dynamic json) {
-    if (json is Map && json["status"] != null) {
+    if (json is Map && (json["status"] != null || json["fault"] != null)) {
       final error = ErrorsMaplinkMessage(
-        code: json["status"]["code"],
-        errorMessage: json["status"]["message"],
+        code: json["status"]?["code"] ?? json["fault"]["detail"]["errorcode"],
+        errorMessage: json["status"]?["message"] ?? json["fault"]["faultstring"],
       );
       throw ErrorsMaplinkFailure([error]);
     }
