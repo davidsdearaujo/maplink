@@ -1,11 +1,7 @@
 import 'package:dio/dio.dart';
-
 import 'package:maplink/src/external/datasources/geocoder_datasource_impl.dart';
-import 'package:maplink/src/external/errors/geocoder_errors.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
-
-import 'geocoder_mock.dart';
 
 class MockClient extends Mock implements Dio {}
 
