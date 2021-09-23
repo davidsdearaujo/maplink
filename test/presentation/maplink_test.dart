@@ -6,25 +6,24 @@ import 'package:test/test.dart';
 void main() {
   late Maplink model;
 
-  // test("sucesso", () async {
-  //   model = Maplink("your-token");
-  //   final response = await model.getAddressByZipcodeAndHouseNumber(
-  //     "03118030",
-  //     "156",
-  //   );
-  //   expect(response, [
-  //     ZipcodeAddressModel(
-  //       state: "SP",
-  //       city: "São Paulo",
-  //       country: "BRA",
-  //       district: "Mooca",
-  //       streetName: "Rua Guaimbé",
-  //       houseNumber: "156",
-  //       latitude: "-46.59345",
-  //       longitude: "-23.562638",
-  //     )
-  //   ]);
-  // });
+  //test("sucesso", () async {
+  //  model = Maplink(clientId: 'jKUnTHBLfCfF4ituOzuUcafLUNZskotQa', clientSecret: 'fcJ17E4ywROPKQrFa');
+  //  final response = await model.getAddressByZipcodeAndHouseNumber(
+  //    "95110-651",
+  //    "334",
+  //  );
+  //  expect(response, [
+  //    ZipcodeAddressModel(
+  //      state: "RS",
+  //      city: "Caxias do Sul",
+  //      district: "Charqueadas",
+  //      streetName: "Rua dos Crisântemos",
+  //      houseNumber: "334",
+  //      latitude: "-29.187536349871046",
+  //      longitude: "-51.2260246356334",
+  //    ),
+  //  ]);
+  //});
   // test("sucesso apenas cep", () async {
   //   model = Maplink("your-token");
   //   final response = await model.getAddressByZipcodeAndHouseNumber("03118030");
@@ -63,16 +62,21 @@ void main() {
   //   );
   // });
 
-  test("incorrect token error", () {
-    model = Maplink("incorrect-token");
-    final response = model.getAddressByZipcodeAndHouseNumber("031180301", "156");
-    expect(
-        response,
-        throwsA(ErrorsMaplinkFailure([
-          ErrorsMaplinkMessage(
-            code: "oauth.v2.InvalidAccessToken",
-            errorMessage: "Invalid access token",
-          )
-        ])));
-  });
+  //test("incorrect token error", () {
+  //  model = Maplink(clientId: 'jKUnTHBLfCfF4ituOzuUcafLUNZskotQa', clientSecret: 'fcJ17E4ywROPKQrFa');
+  //  final response = model.getAddressByZipcodeAndHouseNumber("031180301", "156");
+  //  expect(
+  //    response,
+  //    throwsA(
+  //      ErrorsMaplinkFailure(
+  //        [
+  //          ErrorsMaplinkMessage(
+  //            code: "oauth.v2.InvalidAccessToken",
+  //            errorMessage: "Invalid access token",
+  //          )
+  //        ],
+  //      ),
+  //    ),
+  //  );
+  //});
 }

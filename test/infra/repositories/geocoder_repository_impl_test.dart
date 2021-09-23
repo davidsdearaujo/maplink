@@ -20,7 +20,6 @@ void main() {
     ZipcodeAddressModel(
       state: "SP",
       city: "São Paulo",
-      country: "BRA",
       district: "Mooca",
       streetName: "Rua Guaimbé",
       houseNumber: "156",
@@ -45,7 +44,8 @@ void main() {
     });
 
     test("getAddressByStreetName", () async {
-      when(() => datasource.getAddressByStreetName(any(), any(), any(), any(), any(), any())).thenAnswer((realInvocation) async => successMockResponse);
+      when(() => datasource.getAddressByStreetName(any(), any(), any(), any(), any(), any()))
+          .thenAnswer((realInvocation) async => successMockResponse);
       final response = await repository.getAddressByStreetName(
         "mock-token",
         "mock-country",

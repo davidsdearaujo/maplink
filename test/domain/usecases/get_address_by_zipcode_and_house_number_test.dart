@@ -25,7 +25,6 @@ void main() {
         ZipcodeAddressModel(
           state: "SP",
           city: "São Paulo",
-          country: "BRA",
           district: "Mooca",
           streetName: "Rua Guaimbé",
           houseNumber: "156",
@@ -34,7 +33,8 @@ void main() {
         )
       ];
 
-      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
@@ -51,7 +51,6 @@ void main() {
         ZipcodeAddressModel(
           state: "SP",
           city: "São Paulo",
-          country: "BRA",
           district: "Mooca",
           streetName: "Rua Guaimbé",
           houseNumber: "156",
@@ -60,7 +59,8 @@ void main() {
         )
       ];
 
-      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
@@ -78,7 +78,6 @@ void main() {
         ZipcodeAddressModel(
           state: "SP",
           city: "São Paulo",
-          country: "BRA",
           district: "Mooca",
           streetName: "Rua Guaimbé",
           houseNumber: "156",
@@ -87,7 +86,8 @@ void main() {
         )
       ];
 
-      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
@@ -105,7 +105,6 @@ void main() {
         ZipcodeAddressModel(
           state: "SP",
           city: "São Paulo",
-          country: "BRA",
           district: "Mooca",
           streetName: "Rua Guaimbé",
           houseNumber: "156",
@@ -114,7 +113,8 @@ void main() {
         )
       ];
 
-      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
@@ -163,7 +163,6 @@ void main() {
         ZipcodeAddressModel(
           state: "SP",
           city: "São Paulo",
-          country: "BRA",
           district: "Mooca",
           streetName: "Rua Guaimbé",
           houseNumber: "156",
@@ -172,7 +171,8 @@ void main() {
         )
       ];
 
-      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,
@@ -218,7 +218,6 @@ void main() {
         ZipcodeAddressModel(
           state: "SP",
           city: "São Paulo",
-          country: "BRA",
           district: "Mooca",
           streetName: "Rua Guaimbé",
           houseNumber: "156",
@@ -227,7 +226,8 @@ void main() {
         )
       ];
 
-      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any())).thenAnswer((realInvocation) async => Right(mockResponse));
+      when(() => repository.getAddressByZipcodeAndHouseNumber(any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(mockResponse));
 
       final response = await usecase(
         token: token,

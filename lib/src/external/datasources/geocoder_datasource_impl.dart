@@ -1,14 +1,16 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:maplink/src/domain/models/auth_user.dart';
 import 'package:maplink/src/external/errors/geocoder_errors.dart';
+import 'package:maplink/src/external/mappers/auth_user_mapper.dart';
 import 'package:maplink/src/external/mappers/zipcode_address_model_mapper.dart';
 import 'package:maplink/src/infra/datasources/geocoder_datasource.dart';
 
 import '../../domain/models/zipcode_address_model.dart';
 
 class GeocoderDatasourceImpl implements GeocoderDatasource {
-  final http.Client _client;
+  final Dio _client;
 
   GeocoderDatasourceImpl(this._client);
 
@@ -44,6 +46,22 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
     );
   }
 
+  @override
+  Future<AuthUser> getAuthToken(String client_id, String client_secret) async {
+    _client.options.headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+    var response = await _client.post(
+      'https://api.maplink.global/oauth/client_credential/accesstoken?grant_type=client_credentials',
+      data: {
+        'client_id': client_id,
+        'client_secret': client_secret,
+      },
+    );
+
+    return AuthUserMapper.fromMap(response.data);
+  }
+
   Future<List<ZipcodeAddressModel>> request({
     required String token,
     String? country,
@@ -53,31 +71,39 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
     String? houseNumber,
     String? zipcode,
   }) async {
-    var uri = Uri.https("api.maplink.global", "geocode/v1/geocode", {
-      "token": token,
-      if (zipcode != null) "postalCode": zipcode,
-      if (streetName != null) "streetName": streetName,
-      if (city != null) "city": city,
-      if (state != null) "state": state,
-      if (country != null) "country": country,
-      if (houseNumber != null) "housenumber": houseNumber,
-    });
+    var response = await _client.post('https://api.maplink.global/geocode/v1/geocode',
+        data: jsonEncode({
+          if (zipcode != null) "zipcode": zipcode,
+          if (streetName != null) "road": streetName,
+          if (city != null) "city": city,
+          if (state != null) "state": state,
+          if (country != null) "country": country,
+          if (houseNumber != null) "number": houseNumber,
+        }),
+        options: Options(headers: {'Authorization': 'Bearer $token'}));
 
-    var request = await _client.post(uri);
-
-    final json = jsonDecode(request.body);
-
-    throwMultipleErrorsIfExists(json);
-    throwSingleErrorsIfExists(json);
-
-    final List addressList = json["addresses"];
-    final response = addressList.map(ZipcodeAddressModelMapper.fromJson);
-    return response.toList().cast<ZipcodeAddressModel>();
+    return List<ZipcodeAddressModel>.from(response.data['results'].map((e) => ZipcodeAddressModelMapper.fromJson(e['address'])));
   }
 
-  void throwMultipleErrorsIfExists(dynamic json) {
-    if (json is Map && json["message"] != null) {
-      final errors = json["message"] is String ? jsonDecode(json["message"]) as List : json["message"];
+  void throwMultipleErrorsIfExists(dynamic data) {
+    if (data.statusCode == 200) {
+      return;
+    }
+
+    if (data.statusCode == 400) {
+      throw ErrorsMaplinkFailure([
+        ErrorsMaplinkMessage(code: '400', errorMessage: 'Bad Request (falta de parâmetros ou envio incompleto ou requisição com erros)')
+      ]);
+    }
+
+    if (data.statusCode == 500) {
+      throw ErrorsMaplinkFailure([
+        ErrorsMaplinkMessage(code: '500', errorMessage: 'An Internal Server Error occurred (erro interno no processamento da requisição)')
+      ]);
+    }
+
+    if (data is Map && data["message"] != null) {
+      final errors = data["message"] is String ? jsonDecode(data["message"]) as List : data["message"];
       final parsedErrors = errors.map(
         (error) => ErrorsMaplinkMessage(
           code: error["Code"],
@@ -87,16 +113,6 @@ class GeocoderDatasourceImpl implements GeocoderDatasource {
       throw ErrorsMaplinkFailure(
         parsedErrors.toList().cast<ErrorsMaplinkMessage>(),
       );
-    }
-  }
-
-  void throwSingleErrorsIfExists(dynamic json) {
-    if (json is Map && (json["status"] != null || json["fault"] != null)) {
-      final error = ErrorsMaplinkMessage(
-        code: json["status"]?["code"] ?? json["fault"]["detail"]["errorcode"],
-        errorMessage: json["status"]?["message"] ?? json["fault"]["faultstring"],
-      );
-      throw ErrorsMaplinkFailure([error]);
     }
   }
 }

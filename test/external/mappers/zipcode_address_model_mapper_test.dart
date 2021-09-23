@@ -7,18 +7,17 @@ import 'package:test/test.dart';
 import '../datasources/geocoder_mock.dart';
 
 void main() {
-  late ZipcodeAddressModel model;
+  late ZipcodeAddressModel? model;
   setUp(() {
     final addressJson = jsonDecode(responseMockSingleString);
     model = ZipcodeAddressModelMapper.fromJson(addressJson);
   });
 
-  test("city", () => expect(model.city, "São Paulo"));
-  test("country", () => expect(model.country, "BRA"));
-  test("district", () => expect(model.district, "Jardim Paulista"));
-  test("houseNumber", () => expect(model.houseNumber, "365"));
-  test("latitude", () => expect(model.latitude, "-46.652355"));
-  test("longitude", () => expect(model.longitude, "-23.564986"));
-  test("state", () => expect(model.state, "SP"));
-  test("streetName", () => expect(model.streetName, "Alameda Campinas"));
+  test("city", () => expect(model?.city, "São Paulo"));
+  test("district", () => expect(model?.district, "Jardim Paulista"));
+  test("houseNumber", () => expect(model?.houseNumber, "365"));
+  test("latitude", () => expect(model?.latitude, "-46.652355"));
+  test("longitude", () => expect(model?.longitude, "-23.564986"));
+  test("state", () => expect(model?.state, "SP"));
+  test("streetName", () => expect(model?.streetName, "Alameda Campinas"));
 }

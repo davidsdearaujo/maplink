@@ -1,19 +1,23 @@
-import 'package:http/http.dart';
+//import 'package:http/http.dart';
+import 'package:dio/dio.dart';
 
 Response get successResponse => Response(
-      _responseMockString,
-      200,
-      headers: {"Content-Type": "application/json"},
+      data: _responseMockString,
+      requestOptions: RequestOptions(path: ''),
+      statusCode: 200,
+      headers: Headers()..add("Content-Type", "application/json"),
     );
 Response get unauthorizedErrorResponse => Response(
-      _multipleErrorsResponseString,
-      401,
-      headers: {"Content-Type": "application/json; charset=utf-8"},
+      data: _multipleErrorsResponseString,
+      requestOptions: RequestOptions(path: ''),
+      statusCode: 401,
+      headers: Headers()..add("Content-Type", "application/json; charset=utf-8"),
     );
 Response get invalidCountryErrorResponse => Response(
-      _singleErrorResponseString,
-      401,
-      headers: {"Content-Type": "application/json; charset=utf-8"},
+      data: _singleErrorResponseString,
+      requestOptions: RequestOptions(path: ''),
+      statusCode: 401,
+      headers: Headers()..add("Content-Type", "application/json; charset=utf-8"),
     );
 
 final _multipleErrorsResponseString =
@@ -25,34 +29,19 @@ final _singleErrorResponseString = '''{
     }
 }''';
 final _responseMockString = '''{"addresses": [$responseMockSingleString]}''';
-final responseMockSingleString = '''{
-    "country": {
-        "countryCode": "BRA"
-    },
+final responseMockSingleString = '''{    
     "state": {
-        "shortName": "SP",
+        "code": "SP",
         "name": "São Paulo"
     },
-    "city": {
-        "name": "São Paulo"
+    "city":  "São Paulo",    
+    "district": "Jardim Paulista",    
+    "number": "365",
+    "mainLocation": {     
+      "lat": -46.652355,
+      "lon":   -23.564986        
     },
-    "citySubdivision": {
-        "name": "Jardim Paulista"
-    },
-    "district": {
-        "name": "Jardim Paulista"
-    },
-    "addressLine": {
-        "houseNumber": "365",
-        "location": {
-            "type": "Point",
-            "coordinates": [
-                -46.652355,
-                -23.564986
-            ]
-        },
-        "name": "Alameda Campinas"
-    },
+    "road": "Alameda Campinas",  
     "matchingScore": 100.0,
     "matchLevel": "approximatedAddress",
     "consideredFields": "state,city,district,streetName,houseNumber,postalCode"

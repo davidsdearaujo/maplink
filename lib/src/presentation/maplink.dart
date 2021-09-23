@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:http/http.dart';
+import 'package:dio/dio.dart';
+import 'package:maplink/src/domain/usecases/get_auth_token.dart';
 
 import '../domain/errors/failure.dart';
 import '../domain/errors/presentation.dart';
@@ -12,22 +13,31 @@ import '../infra/repositories/geocoder_repository_impl.dart';
 class Maplink {
   late GetAddressByStreetName _getAddressByStreetName;
   late GetAddressByZipcodeAndHouseNumber _getAddressByZipcodeAndHouseNumber;
-  late String _token;
-  String get token => _token;
+  late GetAuthToken _getAuthToken;
 
-  Maplink(String token) {
-    _token = token;
-    final client = Client();
+  Future<String> getToken() async {
+    var result = await _getAuthToken.call(client_id: clientId, client_secret: clientSecret);
+    return result.fold((l) => '', (r) => r.accessToken);
+  }
+
+  final String clientId;
+  final String clientSecret;
+
+  Maplink({required this.clientId, required this.clientSecret}) {
+    final client = Dio();
     final datasource = GeocoderDatasourceImpl(client);
     final repository = GeocoderRepositoryImpl(datasource);
     _getAddressByStreetName = GetAddressByStreetName(repository);
     _getAddressByZipcodeAndHouseNumber = GetAddressByZipcodeAndHouseNumber(repository);
+    _getAuthToken = GetAuthToken(repository);
   }
 
   Future<List<ZipcodeAddressModel>> getAddressByZipcodeAndHouseNumber(
     String zipcode, [
     String? houseNumber,
   ]) async {
+    var token = await getToken();
+
     final response = await _getAddressByZipcodeAndHouseNumber(
       token: token,
       zipcode: zipcode,
@@ -47,6 +57,8 @@ class Maplink {
     String? country,
     String? housenumber,
   }) async {
+    var token = await getToken();
+
     final response = await _getAddressByStreetName(
       token: token,
       city: city,
