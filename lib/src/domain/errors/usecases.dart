@@ -9,14 +9,18 @@ class NullTokenFailure extends Failure {
 }
 
 class EmptyTokenFailure extends Failure {
-  EmptyTokenFailure()
-      : super("empty-token-failure",
-            message: "É necessário preencher o token para continuar.");
+  EmptyTokenFailure() : super("empty-token-failure", message: "É necessário preencher o token para continuar.");
+}
+
+class EmptyClientIdFailure extends Failure {
+  EmptyClientIdFailure() : super("empty-client-id-failure", message: "É necessário informar o client id para continuar.");
+}
+
+class EmptyClientSecretFailure extends Failure {
+  EmptyClientSecretFailure() : super("empty-client-secret-failure", message: "É necessário informar o client secret para continuar.");
 }
 
 class InvalidFieldFailure extends Failure {
   InvalidFieldFailure(String fieldName)
-      : super("invalid-field-$fieldName-failure",
-            message:
-                "É necessário preencher o campo $fieldName para continuar.");
+      : super("invalid-field-$fieldName-failure", message: "É necessário preencher o campo $fieldName para continuar.");
 }

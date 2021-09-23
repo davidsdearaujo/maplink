@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:maplink/src/domain/models/auth_user.dart';
 
 import '../errors/failure.dart';
 import '../models/zipcode_address_model.dart';
@@ -18,4 +19,6 @@ abstract class GeocoderRepository {
     String streetName,
     String? housenumber,
   );
+
+  Future<Either<Failure, AuthUser>> getAuthToken(String client_id, String client_secret);
 }

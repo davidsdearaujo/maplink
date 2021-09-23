@@ -21,7 +21,6 @@ void main() {
     ZipcodeAddressModel(
       state: "SP",
       city: "São Paulo",
-      country: "BRA",
       district: "Mooca",
       streetName: "Rua Guaimbé",
       houseNumber: "156",
@@ -32,7 +31,8 @@ void main() {
 
   group("Sucesso", () {
     test("todos os campos preenchidos", () async {
-      when(() => repository.getAddressByStreetName(any(), any(), any(), any(), any(), any())).thenAnswer((realInvocation) async => Right(successMockResponse));
+      when(() => repository.getAddressByStreetName(any(), any(), any(), any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(successMockResponse));
 
       final response = await usecase(
         token: "mock-token",
@@ -45,7 +45,8 @@ void main() {
       expect(response.fold(id, id), successMockResponse);
     });
     test("housenumber default", () async {
-      when(() => repository.getAddressByStreetName(any(), any(), any(), any(), any(), any())).thenAnswer((realInvocation) async => Right(successMockResponse));
+      when(() => repository.getAddressByStreetName(any(), any(), any(), any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(successMockResponse));
 
       final response = await usecase(
         token: "mock-token",
@@ -57,7 +58,8 @@ void main() {
       expect(response.fold(id, id), successMockResponse);
     });
     test("housenumber null", () async {
-      when(() => repository.getAddressByStreetName(any(), any(), any(), any(), any(), any())).thenAnswer((realInvocation) async => Right(successMockResponse));
+      when(() => repository.getAddressByStreetName(any(), any(), any(), any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(successMockResponse));
 
       final response = await usecase(
         token: "mock-token",
@@ -87,7 +89,8 @@ void main() {
     //   expect(response, NullTokenFailure());
     // });
     test("EmptyTokenFailure", () async {
-      when(() => repository.getAddressByStreetName(any(), any(), any(), any(), any(), any())).thenAnswer((realInvocation) async => Right(successMockResponse));
+      when(() => repository.getAddressByStreetName(any(), any(), any(), any(), any(), any()))
+          .thenAnswer((realInvocation) async => Right(successMockResponse));
 
       final response = await usecase(
         token: "",

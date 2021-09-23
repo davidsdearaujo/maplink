@@ -1,4 +1,5 @@
 import 'package:maplink/src/domain/errors/repository.dart';
+import 'package:maplink/src/domain/models/auth_user.dart';
 import 'package:maplink/src/domain/models/zipcode_address_model.dart';
 
 import 'package:maplink/src/domain/errors/failure.dart';
@@ -69,6 +70,26 @@ class GeocoderRepositoryImpl implements GeocoderRepository {
     } catch (error) {
       return left(DatasourceExceptionFailure(
         "geocoder-datasource-unexpected-throw",
+        Exception(error),
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthUser>> getAuthToken(String client_id, String client_secret) async {
+    try {
+      final response = await _datasource.getAuthToken(client_id, client_secret);
+      return right(response);
+    } on Failure catch (exception) {
+      return left(exception);
+    } on Exception catch (exception) {
+      return left(DatasourceExceptionFailure(
+        "getAuthToken-datasource-exception",
+        exception,
+      ));
+    } catch (error) {
+      return left(DatasourceExceptionFailure(
+        "getAuthToken-datasource-unexpected-throw",
         Exception(error),
       ));
     }
